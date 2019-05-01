@@ -1,0 +1,1 @@
+# Depotanalyser-Stockmarket-WIP-
