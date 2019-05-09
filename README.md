@@ -1,3 +1,3 @@
 # Depotanalyser-Stockmarket-WIP-
 
-![Portfolio](portfolio09.05.2019.jpg)
+![Portfolio](portfolio_09.05.2019.jpg)
