@@ -33,8 +33,8 @@ def manualmode():
         stockvalues.append(float(input('Please fill in the actual Value per stock of Position Nr. {}: '.format(stock+1))))
         stockshares.append(float(input('How many shares do you own of Position Nr. {}: '.format(stock+1))))
     for i in range(stocknumber):           #cut down namelenght
-        if len(stocknames[i])>8:
-            stocknames[i] = stocknames[i][0:10]
+        if len(stocknames[i])>7:
+            stocknames[i] = stocknames[i][0:6]
         else:
             pass
     df = pd.DataFrame(list(zip(stocknames, stockvalues, stockshares)), columns=['Stock', 'Value', 'Shares'])
@@ -44,11 +44,22 @@ def manualmode():
     return df
 
 def automaticmode():
-    df = pd.read_csv('depot.csv', encoding = 'utf-8')
-    cols = [2,4,6,7,8,9,10,12,13,14,15,16,18,20,22,24,25]
-    df.drop(df.columns[cols],axis=1,inplace=True)
+    df = pd.read_excel('depot.xls', encoding='latin1')
+    df = df.drop(labels=['ISIN', 'Kategorie', 'Börse', 'Zeit', 'Unnamed: 22', 'Unnamed: 6', 'Unnamed: 4',
+                    'Unnamed: 12', 'Unnamed: 14', '+/- Vortag', 'Unnamed: 16', 'Sperre/Lagerst.', 'in %',
+                    'Unnamed: 18', 'Unnamed: 24', 'Datum', 'Unnamed: 20'], axis=1)
+    df = df.rename(columns={"Bezeichnung": "Stock", "Stk./Nominale": "Shares", 'Aktueller Wert': 'TotalValue', 
+                       'Akt. Kurs': 'Value'})
+    df.sort_values("TotalValue", axis = 0, ascending = False, 
+                   inplace = True, na_position ='last')
+    for i in range(df.shape[0]):           #cut down namelenght
+        if len(df['Stock'][i])>7:
+            df['Stock'][i] = df['Stock'][i][0:6]
+        else:
+            pass
+        
+        
     return df
-    return 0
 
 def plot(df):
     
@@ -72,10 +83,12 @@ def plot(df):
     fig.savefig('portfolio_'+str(getdate())+'.jpg')
     fig.show()
     
+    
 def getdate():
     datestring = time.strftime("%d.%m.%Y")
     return datestring
 
+#lets start:
 
 #lets start:
 
@@ -89,6 +102,8 @@ while(mode!=0 and mode!=1):
 
 if mode == 0:
     df = manualmode()
-    print(df)
-    plot(df)
-
+else:
+    df = automaticmode()
+    
+print(df)
+plot(df)
