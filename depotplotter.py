@@ -5,8 +5,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import pandas as pd
-import math
 import time
 
 
@@ -53,8 +51,8 @@ def automaticmode():
     df.sort_values("TotalValue", axis = 0, ascending = False, 
                    inplace = True, na_position ='last')
     for i in range(df.shape[0]):           #cut down namelenght
-        if len(df['Stock'][i])>7:
-            df['Stock'][i] = df['Stock'][i][0:6]
+        if len(df['Stock'][i])>12:
+            df['Stock'][i] = df['Stock'][i][0:11]
         else:
             pass
         
@@ -74,7 +72,7 @@ def plot(df):
     ax2 = fig.add_subplot(1,2,2)
     ax1.bar(y_pos, numbers, edgecolor='blue', color=colors)
     ax1.set_xticks(y_pos)
-    ax1.set_xticklabels(labels)
+    ax1.set_xticklabels(labels, rotation='vertical')
     ax2.pie(numbers, labels=labels, autopct='%1.1f%%', shadow=True, startangle=140, colors = colors)
     circle = plt.Circle((0,0),0.70,fc='white')
     ax2.add_artist(circle)
